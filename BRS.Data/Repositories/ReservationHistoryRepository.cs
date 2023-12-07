@@ -21,18 +21,9 @@ namespace BRS.Data.Repositories
         }
         public async Task<IList<ReservationHistory>> GetReservationHistoryByBookId(Guid bookId)
         {
-            var histories = await ReservationHistoryList(bookId);
+            var histories = await All(x => x.BookId.Equals(bookId)).OrderBy(x => x.CreateDate).ToListAsync();
 
             return histories;
         }
-
-        #region helper
-        private async Task<IList<ReservationHistory>> ReservationHistoryList(Guid bookId)
-        {
-            var reservationHistory = All(x => x.BookId.Equals(bookId)).OrderBy(x => x.CreateDate);
-            
-            return await reservationHistory.ToListAsync();
-        }
-        #endregion
     }
 }

@@ -87,8 +87,8 @@ namespace BRS.Web.Controllers
         {
             try
             {
-                if (!string.IsNullOrEmpty(bookVM.AuthorSrtingId))
-                    bookVM.AuthorId = Guid.Parse(bookVM.AuthorSrtingId);
+                if (!string.IsNullOrEmpty(bookVM.Author_Id))
+                    bookVM.AuthorId = Guid.Parse(bookVM.Author_Id);
                 var createdBook = await _bookService.Add(_mapper.Map<Book>(bookVM));
                 var book = await _bookService.GetBookById(createdBook.Id);
                 if (!string.IsNullOrEmpty(book.AuthorId.ToString()) && book.AuthorId != Guid.Empty)

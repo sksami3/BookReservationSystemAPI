@@ -10,7 +10,7 @@ namespace BRS.Core.Entity
     public class Book : BaseModel
     {
         [Required]
-        public string? Title { get; set; }
+        public string Title { get; set; }
         public string? Comment { get; set; }
         [Required, NotNull]
         [SwaggerSchema(ReadOnly = true)]

@@ -54,7 +54,7 @@ namespace BRS.Web.Controllers
             try
             {
                 await _authorService.Add(author);
-                return Ok(GetAuthorById(author.Id.ToString()));
+                return Ok(await GetAuthorById(author.Id.ToString()));
             }
             catch (Exception ex)
             {

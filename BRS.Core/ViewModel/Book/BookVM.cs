@@ -30,6 +30,6 @@ namespace BRS.Core.ViewModel.Book
         [JsonIgnore]
         public Author? Author { get; set; }
         [DisplayName("Author Id")]
-        public string? AuthorSrtingId { get; set; }
+        public string? Author_Id { get; set; }
     }
 }
