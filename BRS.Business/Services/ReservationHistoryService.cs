@@ -33,7 +33,7 @@ namespace Inventory.Business.Services
             return await _reservationHistoryRepository.FindAsync(id);
         }
 
-        public async Task<IEnumerable<ReservationHistory>> GetReservationHistorys()
+        public async Task<IEnumerable<ReservationHistory>> GetReservationHistories()
         {
             return await _reservationHistoryRepository.All().ToListAsync();
         }

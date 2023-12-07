@@ -1,42 +1,53 @@
 using Inventory.Data.InventoryContext;
+using Inventory.Web;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<BRSDbContext>();
-
-// Add services to the container.
-
 builder.Services.AddControllers();
+//CROS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy",
+        builder =>
+        {
+            // Not a permanent solution, but just trying to isolate the problem
+            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
+});
+builder.Services.Resolve();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+builder.Services.AddDbContext<BRSDbContext>(options =>
+options.UseLazyLoadingProxies().UseSqlite(builder.Configuration.GetConnectionString("DefaultDatabase")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+});
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Migrate latest database changes during startup
+var db = builder.Services.BuildServiceProvider().GetRequiredService<BRSDbContext>();
+db.Database.Migrate();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("MyCorsPolicy");
 
 app.MapControllers();
 
 app.Run();
-
-// Migrate latest database changes during startup
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider
-        .GetRequiredService<BRSDbContext>();
-
-    // Here is the migration executed
-    dbContext.Database.Migrate();
-}

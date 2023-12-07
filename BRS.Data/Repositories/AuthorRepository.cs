@@ -29,10 +29,8 @@ namespace BRS.Data.Repositories
         public async Task UpdateAuthor(Author model)
         {
             var author = await Author(model.Id);
-
             author.Name = model.Name;
             author.SocialSecurityNo = model.SocialSecurityNo;
-            author.Books = model.Books;
 
             Update(author);
             await SaveChangesAsync();

@@ -10,7 +10,7 @@ namespace BRS.Core.Interfaces.Repositories.Base
     public interface IBaseRepository<T> where T : BaseModel
     {
         IQueryable<T> All();
-        IQueryable<T> All(params Expression<Func<T, object>>[] includeProperties);
+        IQueryable<T> All(Expression<Func<T, bool>> where);
         T Find(Guid id);
         Task<T> FindAsync(Guid id);
         void Add(T entity);
@@ -24,6 +24,7 @@ namespace BRS.Core.Interfaces.Repositories.Base
         void UpdateRange(List<T> entites);
         void SaveChanges();
         Task SaveChangesAsync();
+        void Reload(T entity);
 
     }
 }

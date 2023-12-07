@@ -9,7 +9,7 @@ namespace BRS.Core.Interfaces.Services
     public interface IReservationHistoryService
     {
         Task Add(ReservationHistory reservationHistory);
-        Task<IEnumerable<ReservationHistory>> GetReservationHistorys();
+        Task<IEnumerable<ReservationHistory>> GetReservationHistories();
         Task<ReservationHistory> GetReservationHistoryById(Guid id);
         Task<IEnumerable<ReservationHistory>> GetReservationHistoryByBookId(Guid bookId);
     }

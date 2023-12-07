@@ -9,9 +9,9 @@ namespace BRS.Core.Entity
     public class ReservationHistory : BaseModel
     {
         [Required]
-        [ForeignKey("BookId")]
-        public Book? Book { get; set; }
-        public int Status { get; set; } 
+        public Guid BookId { get; set; } // reference
+        public virtual Book? Book { get; set; }
+        public int? Status { get; set; } 
         public string? Comment { get; set; }
     }
 }

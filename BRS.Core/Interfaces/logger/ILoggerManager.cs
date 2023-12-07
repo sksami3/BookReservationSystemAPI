@@ -1,5 +1,6 @@
 ﻿namespace BRS.Core.Interfaces.logger
 {
+    //TODO: implement later
     public interface ILoggerManager
     {
         void LogInfo(string message);

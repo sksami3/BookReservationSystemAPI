@@ -1,4 +1,5 @@
 ﻿using BRS.Core.Entity;
+using BRS.Core.Exception;
 using BRS.Core.Interfaces.Repositories;
 using BRS.Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +35,14 @@ namespace Inventory.Business.Services
             return await _authorRepository.All().ToListAsync();
         }
 
-        public async Task SoftDelete(Guid authorId)
+        public async Task Delete(Guid authorId)
         {
-            await _authorRepository.SoftDelete(authorId);
+            var author = await _authorRepository.FindAsync(authorId);
+            if(author == null) 
+                new GenericException(Exceptions.AuthorNotFound);
+
+            _authorRepository.Delete(author);
+            await _authorRepository.SaveChangesAsync();
         }
 
         public async Task Update(Author author)

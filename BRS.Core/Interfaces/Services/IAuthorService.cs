@@ -10,7 +10,7 @@ namespace BRS.Core.Interfaces.Services
         Task Add(Author Author);
         Task<IEnumerable<Author>> GetAuthors();
         Task Update(Author Author);
-        Task SoftDelete(Guid AuthorId); //logical delete
+        Task Delete(Guid AuthorId);
         Task<Author> GetAuthorById(Guid id);
     }
 }

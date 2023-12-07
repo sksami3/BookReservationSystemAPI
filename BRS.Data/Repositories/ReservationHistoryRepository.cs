@@ -3,6 +3,7 @@ using BRS.Core.Entity;
 using BRS.Core.Exception;
 using BRS.Core.Interfaces.Repositories;
 using Inventory.Data.InventoryContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,11 +27,11 @@ namespace BRS.Data.Repositories
         }
 
         #region helper
-        private async Task<IList<ReservationHistory>> ReservationHistoryList(Guid ReservationHistoryId)
+        private async Task<IList<ReservationHistory>> ReservationHistoryList(Guid bookId)
         {
-            var reservationHistory = await AllAsync(x => x.Id.Equals(ReservationHistoryId));
+            var reservationHistory = All(x => x.BookId.Equals(bookId)).OrderBy(x => x.CreateDate);
             
-            return reservationHistory.ToList();
+            return await reservationHistory.ToListAsync();
         }
         #endregion
     }

@@ -1,4 +1,6 @@
-﻿using BRS.Core.Entity.Base;
+﻿using BRS.Core.Entity;
+using BRS.Core.Entity.Base;
+using BRS.Core.Exception;
 using BRS.Core.Interfaces.Repositories.Base;
 using Inventory.Data.InventoryContext;
 using Microsoft.EntityFrameworkCore;
@@ -46,40 +48,24 @@ namespace BRS.Business.Repositories.Base
 
         public IQueryable<T> All()
         {
-            return entities.Where(x => !x.IsDelete);
+            return entities.Where(x => !x.IsDelete).OrderBy(o => o.CreateDate);
         }
 
-        public IQueryable<T> All(params Expression<Func<T, object>>[] includeProperties)
+        public IQueryable<T> All(Expression<Func<T, bool>> where)
         {
-            IQueryable<T> queryable = All();
-            foreach (Expression<Func<T, object>> includeProperty in includeProperties)
-            {
-                queryable = queryable.Include<T, object>(includeProperty);
-            }
+            IQueryable<T> queryable = entities.Where(where).AsQueryable().OrderBy(o => o.CreateDate); 
 
-            return queryable;
-        }
-
-        public async Task<IQueryable<T>> AllAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> queryable = All();
-
-            foreach (Expression<Func<T, object>> includeProperty in includeProperties)
-            {
-                queryable = queryable.Include<T, object>(includeProperty);
-            }
-
-            return await Task.FromResult(queryable);
+            return queryable.AsQueryable();
         }
 
         public T Find(Guid id)
         {
-            return All(x => x.Id == id).FirstOrDefault();
+            return All(x => x.Id.Equals(id) && !x.IsDelete).FirstOrDefault();
         }
 
         public async Task<T> FindAsync(Guid id)
         {
-            return await entities.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await entities.FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.IsDelete);
         }
 
         public void Update(T entity)
@@ -129,6 +115,11 @@ namespace BRS.Business.Repositories.Base
         public async Task SaveChangesAsync()
         {
             await context.SaveChangesAsync();
+        }
+
+        public void Reload(T entity)
+        {
+            context.Entry(entity).Reload();
         }
     }
 }
