@@ -40,14 +40,23 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.DefaultModelsExpandDepth(-1);
+});
 
 //app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
 
 app.UseCors("MyCorsPolicy");
 
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.Map("/", context => Task.Run((() =>
+        context.Response.Redirect("/swagger/index.html"))));
+});
 
 app.Run();
