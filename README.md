@@ -26,6 +26,10 @@ If you prefer to run the API in a Docker container, use the following commands:
    - `docker run -p 8080:80 -it --rm local-dev`
 3. Open your browser and navigate to [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html) to access the Swagger UI.
 
+### Opening in IDE
+
+If you are opening the project in an IDE, please make sure to set "BRS.Web" as the startup project.
+
 ## API Endpoints
 
 ### Author
